@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var array_data = {{ graph_data|safe }};
+    var data = google.visualization.arrayToDataTable(array_data);
+
+    var options = {
+      title: 'Graph Statement',
+      curveType: 'function',
+      legend: { position: 'bottom' }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+    chart.draw(data, options);
+  }
+</script>
+<div id="curve_chart" style="width: 1300px; height: 600px"></div>
+<div class="container">
+  <h2>Tabular View</h2>
+    <a href="#tabular" class="btn btn-primary" data-toggle="collapse">View Statement</a>
+<br>
+<br>
+  <div id="tabular" class="collapse container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+            <th>Txn Date</th>
+            <th>Value Date</th>
+              <th>Description</th>
+              <th>Ref No./Cheque No.</th>
+              <th>Credit</th>
+              <th>Debit</th>
+              <th>Balance</th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for data in datas %}
+        <tr>
+          {% if data.username == user.username %}
+              <td>{{data.txn}}</td>
+              <td>{{data.value}}</td>
+              <td>{{data.description}}</td>
+              <td>{{data.ref}}</td>
+              <td>{{data.credit}}</td>
+              <td>{{data.debit}}</td>
+              <td>{{data.balance}}</td>
+          {% endif %}
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
