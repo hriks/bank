@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Statement
 import os
@@ -9,6 +9,8 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import tabula
 import csv
+from django.contrib.auth.models import User
+from log.forms import SignUPForm
 
 
 @login_required(login_url="login/")
@@ -61,3 +63,18 @@ def home(request):
         }
         return render(request, 'details.html', context)
     return render(request, "home.html")
+
+
+def create(request):
+    form = SignUPForm()
+    context = {
+        'form': form
+    }
+    if request.POST:
+        username = str(request.POST['username'])
+        password = str(request.POST['password'])
+        email = str(request.POST['email'])
+        user = User.objects.create_superuser(username, email, password)
+        user.save()
+        return redirect('/login')
+    return render(request, "register.html", context)

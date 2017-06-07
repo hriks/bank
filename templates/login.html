@@ -2,6 +2,7 @@
 
 
 {% block content %}
+
     {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
@@ -37,7 +38,9 @@
 </table>
 </p>
 <p class="bs-component">
-<center><input class="btn btn-success btn-sm" type="submit" value="login" /></center>
+<center><a href="{% url 'create' %}" class="btn btn-primary btn-sm">Register</a>
+&nbsp;&nbsp;&nbsp;
+<input class="btn btn-primary btn-sm" type="submit" value="login" /> </center>
 </p>
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
