@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+   <div class="jumbotron">
+     <div class="container">
+      <h2>Click to upload PDF statement</h2>
+       <a href="#demo" class="btn btn-primary" data-toggle="collapse">Upload Statement</a>
+       <br>
+       <br>
+         <div id="demo" class="collapse container">
+          <form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+            <p>
+              <b>
+                <input type="file" class="btn" name="csv_file" value="Choose your statement" />
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="submit" class="btn btn-success" value="upload"/>
+              </b>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
