@@ -63,8 +63,12 @@ WSGI_APPLICATION = 'bank.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hzkmlgkp',
+        'USER': 'hzkmlgkp',
+        'PASSWORD': 'Ve3vQ3eof6sokYNoGP7GUsQhUyRkHVAh',
+        'HOST': 'stampy.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
