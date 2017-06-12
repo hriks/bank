@@ -22,14 +22,18 @@ def home(request):
             'tmp/' + str(data), ContentFile(data.read())
         )
         tmp_file_path = os.path.join(settings.MEDIA_ROOT, path)
-        tabula.convert_into(tmp_file_path, "output.csv", output_format="csv")
+        tabula.convert_into(
+            tmp_file_path, "output.csv", spreadsheet=True, output_format="csv"
+        )
 
         input_file = csv.DictReader(open('output.csv'))
         data = []
         for i in input_file:
             data.append(i)
-        graph_data = [[str('Month'), str('Credit'), str('Deposit')], ]
         for i in data:
+            if len(i['Balance']) > 2:
+                balance = float(i['Balance'].replace(",", ""))
+                print balance
             if len(i['Txn Date']) > 2:
                 if len(i['Credit']) > 2:
                     credit = float(i['Credit'].replace(",", ""))
@@ -44,22 +48,19 @@ def home(request):
                 statement = Statement(
                     username=request.user.username,
                     description=i['Description'],
-                    ref=i['Ref No./Cheque'],
-                    value=i['Value'],
-                    credit=i['Credit'],
-                    debit=i['Debit'],
+                    ref=i['Ref No./Cheque\rNo.'],
+                    value=i['Value\rDate'],
+                    credit=credit,
+                    debit=debit_int,
                     txn=i['Txn Date'],
-                    balance=i['Balance']
+                    balance=balance
                 )
                 statement.save()
-                if len(i['Balance']) > 2 or len(i['Debit']) > 2:
-                    graph_data.append([str(i['Txn Date']), credit, debit_int])
-        print graph_data
+
         datas = Statement.objects.all()
         print datas
         context = {
             'datas': datas,
-            'graph_data': graph_data
         }
         return render(request, 'details.html', context)
     return render(request, "home.html")
@@ -78,3 +79,10 @@ def create(request):
         user.save()
         return redirect('/login')
     return render(request, "register.html", context)
+
+
+def get_data(request):
+    import pdb; pdb.set_trace()
+    if request.method == 'POST':
+        datas = Statement.objects.get(request.user.username)
+        return datas
