@@ -11,7 +11,7 @@ import tabula
 import csv
 from django.contrib.auth.models import User
 from log.forms import SignUPForm
-
+from django.http import JsonResponse
 
 @login_required(login_url="login/")
 def home(request):
@@ -81,8 +81,27 @@ def create(request):
     return render(request, "register.html", context)
 
 
-def get_data(request):
-    import pdb; pdb.set_trace()
-    if request.method == 'POST':
-        datas = Statement.objects.get(request.user.username)
-        return datas
+def details(request):
+    print("test>>>>>>>>>>>>>>>")
+    if request.method == 'GET':
+        datas = Statement.objects.all()
+        dict1 = dict()
+        count = 0
+        for data in datas:
+            if str(data.username) == request.user.username:
+                description = str(data.description)
+                ref = str(data.ref)
+                value = str(data.value)
+                credit = str(data.credit)
+                debit = str(data.debit)
+                txn = str(data.txn)
+                balance = str(data.balance)
+
+            print description, ref, value, credit, debit, txn, balance # noqa
+            ajax_value = [
+                txn, value, description, ref, credit, debit, balance
+            ]
+            dict1['obj' + str(count)] = ajax_value
+            count += 1
+        JsonResponse(dict1)
+        return JsonResponse(dict1)

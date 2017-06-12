@@ -2,26 +2,6 @@
 
 {% block content %}
 
-<!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var array_data = {{ graph_data|safe }};
-    var data = google.visualization.arrayToDataTable(array_data);
-
-    var options = {
-      title: 'Graph Statement',
-      curveType: 'function',
-      legend: { position: 'bottom' }
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-    chart.draw(data, options);
-  }
-</script>
-<div id="curve_chart" style="width: 1300px; height: 600px"></div>-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script type="text/javascript">
 
@@ -32,15 +12,26 @@ function loaddata()
  if(name)
  {
   $.ajax({
-  type: 'post',
-  url: '/details/',
-  data: {
-   user_name:name,
-  },
+  url: 'details/',
+  dataType: 'json',
   success: function (response) {
-   // We get the element having id of display_info and put the response inside it
-   console.log(response);
-   $( '#display_info' ).html(response);
+   var obj = JSON.stringify(response);
+   var result = JSON.parse(obj);
+   console.log(obj);
+   console.log(result);
+   var i =0;
+    $('#display_info').append('<tr><th>' + '  Txn Date' + '</th><th>' + '  Value Date  ' + '</th><th>' + '  Description  ' + '</th><th>' + 'Ref No./Cheque No.'+ '</th><th>' + 'Credit' + '</th><th>' + 'Debit' + '</th><th>' + 'Balance'
+);
+    $('#display_info').append('<tr><th>' + '__________________' + '</th><th>' + '__________________' + '</th><th>' + '________________________________________________________________________________________' + '</th><th>' + '______________________________' + '</th><th>' + '__________________' + '</th><th>' + '__________________' + '</th><th>' + '__________________' 
+);
+   $.each(result, function(){
+    $('#display_info').append('<tr><td>' + this[0] + '</td><td>' + this[1] + '</td><td>' + this[2] + '</td><td>' + this[3] + '</td><td>' + this[4] + '</td><td>' + this[5] + '</td><td>' + this[6]
+);   
+    $('#display_info').append('<tr><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ''
+);
+    i =i +1;
+});
+   
   }
   });
  }
@@ -52,49 +43,15 @@ function loaddata()
 }
 
 </script>
-<button type="button" onclick="loaddata();">Change Content</button>
-<input type="text" name="username" id="username" onkeyup="loaddata();">
-<div class="container" id = "display_info">
-{{response}}
-<script type="text/javascript">
-        document.write(response)
-      </script>
-</div>
 <div class="container">
   <h2>Tabular View</h2>
-    <a href="#tabular" class="btn btn-primary" data-toggle="collapse" value="{{user.username}}">View Statement</a>
-<br>
-<br>
-  <div id="tabular" class="collapse container">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-            <th>Txn Date</th>
-            <th>Value Date</th>
-              <th>Description</th>
-              <th>Ref No./Cheque No.</th>
-              <th>Credit</th>
-              <th>Debit</th>
-              <th>Balance</th>
-          </tr>
-      </thead>
-      <tbody>
-        {% for data in datas %}
-        <tr>
-          {% if data.username == user.username %}
-              <td>{{data.txn}}</td>
-              <td>{{data.value}}</td>
-              <td>{{data.description}}</td>
-              <td>{{data.ref}}</td>
-              <td>{{data.credit}}</td>
-              <td>{{data.debit}}</td>
-              <td>{{data.balance}}</td>
-          {% endif %}
-            </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <button class="btn btn-primary" type="button" onclick="loaddata();">View Statement</button>
+  <input type="hidden" name="username" id="username" onkeyup="loaddata();">
+  <br>
+  <br>
+<div class="container" id = "display_info">
+
+</div>
 </div>
 
 {% endblock %}
