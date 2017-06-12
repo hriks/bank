@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(drawChart);
@@ -21,10 +21,48 @@
     chart.draw(data, options);
   }
 </script>
-<div id="curve_chart" style="width: 1300px; height: 600px"></div>
+<div id="curve_chart" style="width: 1300px; height: 600px"></div>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+function loaddata()
+{
+ var name=document.getElementById( "username" );
+  
+ if(name)
+ {
+  $.ajax({
+  type: 'post',
+  url: '/details/',
+  data: {
+   user_name:name,
+  },
+  success: function (response) {
+   // We get the element having id of display_info and put the response inside it
+   console.log(response);
+   $( '#display_info' ).html(response);
+  }
+  });
+ }
+  
+ else
+ {
+  $( '#display_info' ).html("you are not logged in");
+ }
+}
+
+</script>
+<button type="button" onclick="loaddata();">Change Content</button>
+<input type="text" name="username" id="username" onkeyup="loaddata();">
+<div class="container" id = "display_info">
+{{response}}
+<script type="text/javascript">
+        document.write(response)
+      </script>
+</div>
 <div class="container">
   <h2>Tabular View</h2>
-    <a href="#tabular" class="btn btn-primary" data-toggle="collapse">View Statement</a>
+    <a href="#tabular" class="btn btn-primary" data-toggle="collapse" value="{{user.username}}">View Statement</a>
 <br>
 <br>
   <div id="tabular" class="collapse container">
