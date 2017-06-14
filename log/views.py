@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from log.forms import SignUPForm
 from django.http import JsonResponse
 
+
 @login_required(login_url="login/")
 def home(request):
     if request.POST and request.FILES:
@@ -23,7 +24,10 @@ def home(request):
         )
         tmp_file_path = os.path.join(settings.MEDIA_ROOT, path)
         tabula.convert_into(
-            tmp_file_path, "output.csv", spreadsheet=True, output_format="csv"
+            tmp_file_path, "output.csv",
+            spreadsheet=True,
+            pages='all',
+            output_format="csv"
         )
 
         input_file = csv.DictReader(open('output.csv'))
